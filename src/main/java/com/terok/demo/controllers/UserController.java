@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.terok.demo.models.Users;
+import com.terok.demo.repositories.UsersRepository;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,12 +26,19 @@ public class UserController {
 
 	Logger logger = LogManager.getLogger();
 
+	@Autowired
+	private UsersRepository usersRepository;
 	/*
 	 * POST new User
 	 */
 	@RequestMapping(value = "/registration", method = RequestMethod.POST,
 					consumes="application/json")
-	public String addUser( @RequestBody Users user) {
+	public String addUser(@Valid @RequestBody Users user) {
+		
+		if(usersRepository.findByUserName(user.userName) != null) {
+			return "Username already taken " + HttpStatus.BAD_REQUEST.toString();
+		}
+		
 		user.set_id(ObjectId.get());
 		
 		String msg = String.format("Adding %s", user.getUserName());
@@ -38,6 +48,7 @@ public class UserController {
 		String email = user.email;
 		// Todo Check if username or email taken
 		String password = user.password;
+		usersRepository.save(user);
 		// HttpStatus
 		// return response.getStatus();
 		return String.format("User %s added", userName);
