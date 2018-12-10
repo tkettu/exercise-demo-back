@@ -46,8 +46,7 @@ public class UserController {
 		
 		String userName = user.userName;
 		String email = user.email;
-		// Todo Check if username or email taken
-		String password = user.password;
+		String password = user.password; //TODO PasswordHash
 		usersRepository.save(user);
 		// HttpStatus
 		// return response.getStatus();
