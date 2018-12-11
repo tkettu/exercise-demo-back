@@ -1,5 +1,8 @@
 package com.terok.demo.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -11,6 +14,9 @@ public class Users {
 	public String email;
 
 	public String password;
+	
+
+	private Set<Role> roles = new HashSet<>();
 	
 	
 	public Users(ObjectId _id, String userName, String password) {
@@ -51,7 +57,12 @@ public class Users {
 		this.password = password;
 	}
 	
+	public Set<Role> getRoles() {
+		return roles;
+	}
 	
-	
-	
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+		
 }
