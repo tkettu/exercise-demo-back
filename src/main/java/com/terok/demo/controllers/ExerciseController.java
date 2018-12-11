@@ -18,7 +18,7 @@ public class ExerciseController {
 	public String getExercise() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		logger.info(auth.getName());
-		
+		logger.info(auth.getPrincipal());
 		return "HELLO ROKI";
 	}
 }

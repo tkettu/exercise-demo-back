@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 
@@ -44,14 +45,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				// .csrf().disable().cors().and()
-				.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.cors().and().csrf().disable()
+				.exceptionHandling()
+				.authenticationEntryPoint(unauthorizedHandler)
+				.and()
+				.sessionManagement().disable()
+				//.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				//.and()
+				.authorizeRequests()
 				.antMatchers("/api/login").permitAll()
 				.antMatchers("/api/user/registration").permitAll()
-				.antMatchers("/api/exercises").permitAll()  //TEST
+				//.antMatchers("/api/exercises").permitAll()  //TEST
 				.anyRequest().authenticated();
 				// .and().httpBasic()
 				//.and().sessionManagement().disable();
+		
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean
