@@ -10,6 +10,7 @@ import org.apache.logging.log4j.message.Message;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,9 @@ public class UserController {
 
 	@Autowired
 	private UsersRepository usersRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	/*
 	 * POST new User
 	 */
@@ -45,8 +49,7 @@ public class UserController {
 		logger.info(msg);
 		
 		String userName = user.userName;
-		String email = user.email;
-		String password = user.password; //TODO PasswordHash
+		user.setPassword(passwordEncoder.encode(user.password));
 		usersRepository.save(user);
 		// HttpStatus
 		// return response.getStatus();
