@@ -45,7 +45,7 @@ public class UserController {
 			return "Username already taken " + HttpStatus.BAD_REQUEST.toString();
 		}
 		
-		user.set_id(ObjectId.get());
+		//user.set_id(ObjectId.get());
 				
 		String userName = user.userName;
 		user.setPassword(passwordEncoder.encode(user.password));

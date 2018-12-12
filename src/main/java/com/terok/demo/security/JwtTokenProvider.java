@@ -28,18 +28,22 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication) {
     	
     	//logger.info(authentication.getPrincipal())
-        //UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        logger.info(userPrincipal.getName());
         
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-
-        return Jwts.builder()
+        String token = 
+        	Jwts.builder()
                 //.setSubject(userPrincipal.getId().toString())
-        		.setSubject(authentication.getName())
+        		.setSubject(userPrincipal.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+        logger.info("TOKEN LUOTU " + token);
+        
+        return token;
     }
 
     public Long getUserIdFromJWT(String token) {
@@ -52,12 +56,23 @@ public class JwtTokenProvider {
     }
     
     public String getUserNameFromJWT(String token) {
-    	Claims claims = Jwts.parser()
+    	logger.info("TOKEN on " + token);
+    	
+    	//TODO PARSE 
+    	//Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    	String username = Jwts.parser()
+    			.setSigningKey(jwtSecret)
+    			.parseClaimsJws(token)
+    			.getBody().getSubject();
+    	logger.info("USERI SAADAAN " + username);
+    	/*Claims claims = Jwts.parser()
     			.setSigningKey(jwtSecret)
     			.parseClaimsJwt(token)
     			.getBody();
-    	
-    	return claims.toString();
+    	logger.info("Claims on " + claims);
+    	*/
+    	//return claims.toString();
+    	return username;
     }
 
     public boolean validateToken(String authToken) {

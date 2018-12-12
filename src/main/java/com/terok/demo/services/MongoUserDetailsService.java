@@ -14,40 +14,42 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import com.terok.demo.models.Users;
 import com.terok.demo.repositories.UsersRepository;
+import com.terok.demo.security.UserPrincipal;
 
 @Component
-public class MongoUserDetailsService implements UserDetailsService{
+public class MongoUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UsersRepository repository;
-	
+
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Users user = repository.findByUserName(username);
-		
+
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
-		
-		List<SimpleGrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("user"));
-	    //return (UserDetails) new UserUser(user.getUsername(), user.getPassword(), authorities);
-	    return new User(user.getUserName(), user.getPassword(), authorities);
+
+		return UserPrincipal.create(user);
+		// List<SimpleGrantedAuthority> authorities = Arrays.asList(new
+		// SimpleGrantedAuthority("user"));
+		// return (UserDetails) new UserUser(user.getUsername(), user.getPassword(),
+		// authorities);
+		// return new User(user.getUserName(), user.getPassword(), authorities);
 	}
-	
-//	 @Transactional
-//	    public UserDetails loadUserById(ObjectId id) {
-//		 	try {
-//		 		User user = repository.fi
-//			} catch (ResourceNotFoundException e) {
-//				// TODO: handle exception
-//			}
-//	        .orElseThrow(
-//	            () -> new ResourceNotFoundException("User", "id", id)
-//	        );
+
+//	@Transactional
+//    public UserDetails loadUserById(Long id) {
+//	 	
+//	 	User user = repository.findById(id)
 //
-//	        return UserPrincipal.create(user);
-//	    }
+//        .orElseThrow(
+//            () -> new UserNameNotFound("User not found with id " + id)
+//        );
+//
+//        return UserPrincipal.create(user);
+//    }
 	
 	
 

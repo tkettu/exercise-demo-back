@@ -25,7 +25,7 @@ import com.terok.demo.services.MongoUserDetailsService;
         jsr250Enabled = true,
         prePostEnabled = true
 )
-@EnableConfigurationProperties
+//@EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	MongoUserDetailsService userDetailsService;

@@ -70,6 +70,7 @@ public class LoginController {
 		
 		//TODO TOKEN SETTING
         String jwt = tokenProvider.generateToken(authentication);
+        logger.info("LOGIN JWT " + jwt);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 		//return ResponseEntity.ok(new JwtAuthenticationResponse(authentication.getName() +"FALSETOKEN"));
 //		logger.info("Login as " +  user.userName);
