@@ -5,7 +5,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,12 @@ import org.springframework.security.config.BeanIds;
 import com.terok.demo.services.MongoUserDetailsService;
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
@@ -49,17 +57,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.exceptionHandling()
 				.authenticationEntryPoint(unauthorizedHandler)
 				.and()
-				.sessionManagement().disable()
-				//.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				//.and()
+				.sessionManagement()//.disable()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
 				.authorizeRequests()
 				.antMatchers("/api/login").permitAll()
 				.antMatchers("/api/user/registration").permitAll()
 				//.antMatchers("/api/exercises").permitAll()  //TEST
-				.anyRequest().authenticated();
-				// .and().httpBasic()
+				.anyRequest().authenticated() //TEST
+				 //.and().httpBasic()
 				//.and().sessionManagement().disable();
-		
+				;
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 

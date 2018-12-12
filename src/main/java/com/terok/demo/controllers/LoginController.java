@@ -2,6 +2,8 @@ package com.terok.demo.controllers;
 
 import java.security.Principal;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,9 @@ import org.springframework.http.ResponseEntity;
 
 import com.mongodb.util.JSON;
 import com.terok.demo.models.Users;
+import com.terok.demo.payload.JwtAuthenticationResponse;
+import com.terok.demo.payload.LoginRequest;
 import com.terok.demo.repositories.UsersRepository;
-import com.terok.demo.security.JwtAuthenticationResponse;
 import com.terok.demo.security.JwtTokenProvider;
 import com.terok.demo.security.UserPrincipal;
 
@@ -48,13 +51,15 @@ public class LoginController {
 	 */
 	
 	@RequestMapping(value="", method = RequestMethod.POST)
-	public ResponseEntity<?> login(@RequestBody Users user) {
+	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest user) {
 		
 		
 		Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.userName,
-                        user.password
+                        user.getUsername(),
+                        user.getPassword()
+                		//user.userName,
+                        //user.password
                 )
         );
 		

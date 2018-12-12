@@ -1,4 +1,4 @@
-package com.terok.demo.security;
+package com.terok.demo.payload;
 
 public class JwtAuthenticationResponse {
 	private String accessToken;

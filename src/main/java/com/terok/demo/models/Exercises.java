@@ -22,7 +22,29 @@ public class Exercises {
 	
 	public double distance;
 	
+	public int avgHeartRate;
+	public int maxHeartRate;
+	
+	public String description;
 	public Date date;
+	
+	public String season; //
+
+	public Exercises(ObjectId id, String owner, String sport, int hours, int minutes, double distance, int avgHeartRate,
+			int maxHeartRate, String description, Date date, String season) {
+		super();
+		this.id = id;
+		this.owner = owner;
+		this.sport = sport;
+		this.hours = hours;
+		this.minutes = minutes;
+		this.distance = distance;
+		this.avgHeartRate = avgHeartRate;
+		this.maxHeartRate = maxHeartRate;
+		this.description = description;
+		this.date = date;
+		this.season = season;
+	}
 	
 	
 }
