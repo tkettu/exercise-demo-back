@@ -39,19 +39,18 @@ public class UserController {
 					consumes="application/json")
 	public String addUser(@Valid @RequestBody Users user) {
 		
+		logger.info(String.format("Adding %s", user.userName));
+		
 		if(usersRepository.findByUserName(user.userName) != null) {
 			return "Username already taken " + HttpStatus.BAD_REQUEST.toString();
 		}
 		
 		user.set_id(ObjectId.get());
-		
-		String msg = String.format("Adding %s", user.getUserName());
-		logger.info(msg);
-		
+				
 		String userName = user.userName;
 		user.setPassword(passwordEncoder.encode(user.password));
 		usersRepository.save(user);
-		// HttpStatus
+		// TODO HttpStatus
 		// return response.getStatus();
 		return String.format("User %s added", userName);
 	}
