@@ -68,29 +68,12 @@ public class LoginController {
 		logger.info(authentication.getPrincipal().toString());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-		//TODO TOKEN SETTING
+		
         String jwt = tokenProvider.generateToken(authentication);
         logger.info("LOGIN JWT " + jwt);
+        //TODO Return token and username or just token
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
-		//return ResponseEntity.ok(new JwtAuthenticationResponse(authentication.getName() +"FALSETOKEN"));
-//		logger.info("Login as " +  user.userName);
-//		Users user2 = usersRepository.findByUserName(user.userName); 
-//		if(user != null) {
-//			if(passwordEncoder.matches(user.password, user2.getPassword())){
-////				UsernamePasswordAuthenticationToken authReq
-////				 = new UsernamePasswordAuthenticationToken(user.userName, user.password);
-////				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-////				auth.setAuthenticated(true);
-//				
-//				//authReq.setAuthenticated(true);
-//				//SecurityContext sc = SecurityContextHolder.getContext();
-//				//securityContext.setAuthentication(auth);
-//				return "TOKEN"; //TODO token
-//			}
-			
-		//}
 		
-		//return "Username or password wrong " + HttpStatus.UNAUTHORIZED.toString();
 	}
 	
 

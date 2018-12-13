@@ -8,13 +8,14 @@ import org.springframework.data.annotation.Id;
 public class Exercises {
 	
 	@Id
-	public ObjectId id;
+	private ObjectId id;
 	
 	//TODO kumpi id, vai username
 	//Viittaus Useriin
 	//public ObjectId owner;
 	public String owner;
 	
+
 	public String sport;
 
 	public int hours;
@@ -46,5 +47,12 @@ public class Exercises {
 		this.season = season;
 	}
 	
+	public String getId() {
+		return id.toHexString();
+	}
+	
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
 	
 }

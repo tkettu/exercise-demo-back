@@ -7,15 +7,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.terok.demo.models.Exercises;
+import com.terok.demo.payload.ApiResponse;
+import com.terok.demo.payload.ExerciseRequest;
 import com.terok.demo.repositories.ExerciseRepository;
 
 @RestController
@@ -37,11 +44,26 @@ public class ExerciseController {
 	
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public ResponseEntity<?> addExercise(@RequestBody Exercises exercise){
-		
+	//public ResponseEntity<?> addExercise(@RequestBody ExerciseRequest exerciseRequest) {	
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//TODO luodako servicessa uusi exerciseRequestista vai näin kuin nyt
+		//exerciseRequest.setOwner(auth.getName());
+		
+//		Date date = new Date();
+//		
+//		Exercises exercise = new Exercises(ObjectId.get(), 
+//				auth.getName(),
+//				exerciseRequest.getSport(),
+//				exerciseRequest.getHours(),
+//				exerciseRequest.getMinutes(),
+//				exerciseRequest.getDistance(),
+//				exerciseRequest.getAvgHeartRate(),
+//				exerciseRequest.getMaxHeartRate(),
+//				exerciseRequest.getDescription(),
+//				e);
 		
 		exercise.owner = auth.getName();
-		exercise.id = ObjectId.get();
+		exercise.setId(ObjectId.get());
 		
 		Date date = new Date();
 		
@@ -67,7 +89,76 @@ public class ExerciseController {
 		return ResponseEntity.ok(exercises);
 	}
 	
+	@GetMapping("/{id}")
+	ResponseEntity<?> getOneExercise(@PathVariable ObjectId id) {
+		//TODO Check ownership??
+		
+		Exercises exercise = exerciseRepository.findExerciseById(id);
+		
+		if(checkOwnerShip(exercise)) {
+			return ResponseEntity.ok(exercise);
+		} else {
+			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
+					HttpStatus.BAD_REQUEST);
+		}
+		//return ResponseEntity.ok(exerciseRepository.findById(id));
+		
+	}
+	
+	@PutMapping("/{id}")
+	ResponseEntity<?> modifyExercise(@PathVariable ObjectId id, 
+			@RequestBody Exercises newExercise) {
+		
+		//Exercises exercise = exerciseRepository.findExerciseById(id);
+		Exercises exercise = exerciseRepository.findExerciseById(id);
+		
+		if(checkOwnerShip(exercise)) {
+			newExercise.setId(id);
+			newExercise.owner = exercise.owner;
+			//exerciseRepository.save(exerciseRepository.findExerciseById(id));
+			exerciseRepository.save(newExercise);
+			return ResponseEntity.ok(newExercise);
+		} else {
+			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
+					HttpStatus.BAD_REQUEST);
+		}
+	
+	}
+	
+	@DeleteMapping("/{id}")
+	ResponseEntity<?> deleteExercise(@PathVariable ObjectId id) {
+		
+		Exercises exercise = exerciseRepository.findExerciseById(id);
+		String name = exercise.sport;
+		if (checkOwnerShip(exercise)) {
+			exerciseRepository.delete(exercise);
+			return new ResponseEntity(new ApiResponse(true, 
+					String.format("Deleted %s ", name)), 
+					HttpStatus.OK);
+		} else 
+			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
+				HttpStatus.BAD_REQUEST);
+	}
+	
+	//TODO Delete
+
+	//private ResponseEntity<?> checkOwnerShip(Exercises exercise) {
+	private boolean checkOwnerShip(Exercises exercise) {
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//logger.info(auth.getName());
+		return SecurityContextHolder.getContext().getAuthentication()
+				.getName().equals(exercise.owner);
+		//return auth.getName().equals(exercise.owner);
+//		if (auth.getName().equals(exercise.owner)) {
+//			return ResponseEntity.ok(exercise);
+//		}else
+//			return ResponseEntity.badRequest().build();
+			//return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	
+	
 	//TODO PUT Muokkaa by id, varmista omistajuus
-	//TODO GET by id, varmista omistajuus
 	
 }

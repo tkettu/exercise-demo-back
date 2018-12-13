@@ -18,6 +18,9 @@ public class Users {
 
 	private Set<Role> roles = new HashSet<>();
 	
+	//TODO Add Some default sports and user own
+	//private Set<String> sports = new HashSet<>();
+	
 	
 	public Users(ObjectId _id, String userName, String password) {
 		this._id = _id;
