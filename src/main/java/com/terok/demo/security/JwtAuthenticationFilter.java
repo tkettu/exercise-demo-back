@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,20 +37,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-        	logger.info(request.getAttributeNames());
-        	logger.info(request.getAuthType());
-        	logger.info(request.getHeaderNames());
+        logger.info("ENSI ERQUEST ON " + request.toString());
+        logger.info("PROTCOL ON " + request.getProtocol()); 	
+    	try {
+        	logger.info("ATTRIBUUTIT "  + request.getAttributeNames());
+        	logger.info("REQUEST " + request.toString());
+        	logger.info("HEADERIT " +request.getHeaderNames());
         	logger.info("request on " + request.getHeader("Authorization"));
             String jwt = getJwtFromRequest(request);
             logger.info("JWT ON " + jwt.toString());
+            //logger.info("USERI " + tokenProvider.getUserNameFromJWT(jwt));
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 //Long userId = tokenProvider.getUserIdFromJWT(jwt);
+            	String userId = tokenProvider.getUserIdFromJWT(jwt);
+            	
+            	logger.info("ONKO OBJECTID " + ObjectId.isValid(userId));
+            	ObjectId oId = new ObjectId(userId);
             	logger.info("VALIDOITU TOKEN");
             	//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             	//String userName = auth.getName();
-                String userName = tokenProvider.getUserNameFromJWT(jwt);
-                logger.info("USERI IS" + userName);
+                //String userName = tokenProvider.getUserNameFromJWT(jwt);
+                //logger.info("USERI IS" + userName);
                 //logger.info("USER IS " + userName);
                 //TODO MAKE JWT BY USERNAME
                 /*
@@ -57,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     and create the UserDetails object by parsing those claims from the JWT.
                     That would avoid the following database hit. It's completely up to you.
                  */
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+                UserDetails userDetails = userDetailsService.loadUserById(oId);
                 //UserDetails userDetails = userDetailsService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication = 
                 		new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -67,6 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
+        	logger.info("EI VOITY");
             logger.error("Could not set user authentication in security context", ex);
         }
 
@@ -76,7 +85,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         logger.info("bearerTOken " + bearerToken);
+        logger.info("sUTILS ON " + StringUtils.hasText(bearerToken));
+        logger.info("STARTS WITH " + bearerToken.startsWith("Bearer"));
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        	logger.info("JWTFROM REQ " + bearerToken.substring(7, bearerToken.length()));
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;

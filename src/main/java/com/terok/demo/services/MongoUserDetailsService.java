@@ -2,6 +2,7 @@ package com.terok.demo.services;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +40,25 @@ public class MongoUserDetailsService implements UserDetailsService {
 		// return new User(user.getUserName(), user.getPassword(), authorities);
 	}
 
-//	@Transactional
-//    public UserDetails loadUserById(Long id) {
-//	 	
-//	 	User user = repository.findById(id)
-//
-//        .orElseThrow(
-//            () -> new UserNameNotFound("User not found with id " + id)
-//        );
-//
-//        return UserPrincipal.create(user);
-//    }
+	@Transactional
+    public UserDetails loadUserById(ObjectId _id) {
+	 	
+		Optional<Users> user = repository.findById(_id);
+		//Users user = repository.findById(_id);
+		
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found");
+		}
+		
+	
+		return UserPrincipal.create(user.get());
+	 	
+
+        //.orElseThrow(
+        //    () -> new UserNameNotFound("User not found with id " + id)
+        //);
+
+    }
 	
 	
 

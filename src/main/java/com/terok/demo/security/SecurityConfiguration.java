@@ -61,6 +61,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeRequests()
+				.antMatchers("/",
+						"/favicon.ico",
+						"/**/*.png",
+						"/**/*.jpg",
+						"/**/*.gif",
+						"/**/*.svg",
+						"/**/*.htlm",
+						"/**/*.js",
+						"/**/*.css",
+						"/**/*.js")
+						.permitAll()
 				.antMatchers("/api/login").permitAll()
 				.antMatchers("/api/user/registration").permitAll()
 				//.antMatchers("/api/exercises").permitAll()  //TEST

@@ -16,7 +16,8 @@ import com.terok.demo.models.Users;
 
 public class UserPrincipal implements UserDetails {
 
-	private ObjectId id;
+	//private ObjectId id;
+	private String id;
 
     private String username;
 
@@ -28,7 +29,7 @@ public class UserPrincipal implements UserDetails {
 	
 	public Collection<? extends GrantedAuthority> authorities;
 	
-	public UserPrincipal(ObjectId id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+	public UserPrincipal(String id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -54,7 +55,7 @@ public class UserPrincipal implements UserDetails {
         );
     }
 
-	public ObjectId getId() {
+	public String getId() {
         return id;
     }
 

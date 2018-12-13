@@ -140,25 +140,9 @@ public class ExerciseController {
 				HttpStatus.BAD_REQUEST);
 	}
 	
-	//TODO Delete
-
-	//private ResponseEntity<?> checkOwnerShip(Exercises exercise) {
 	private boolean checkOwnerShip(Exercises exercise) {
-		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//logger.info(auth.getName());
 		return SecurityContextHolder.getContext().getAuthentication()
 				.getName().equals(exercise.owner);
-		//return auth.getName().equals(exercise.owner);
-//		if (auth.getName().equals(exercise.owner)) {
-//			return ResponseEntity.ok(exercise);
-//		}else
-//			return ResponseEntity.badRequest().build();
-			//return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.BAD_REQUEST);
-		
+	
 	}
-	
-	
-	
-	//TODO PUT Muokkaa by id, varmista omistajuus
-	
 }
