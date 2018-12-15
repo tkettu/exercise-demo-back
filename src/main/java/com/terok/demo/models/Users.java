@@ -1,10 +1,14 @@
 package com.terok.demo.models;
 
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation.EmptyArraysBuilder;
 
 public class Users {
 	
@@ -17,6 +21,8 @@ public class Users {
 	
 
 	private Set<Role> roles = new HashSet<>();
+	
+	public List<String> exercises = new ArrayList<>();
 	
 	//TODO Add Some default sports and user own
 	//private Set<String> sports = new HashSet<>();

@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.terok.demo.models.Exercises;
+import com.terok.demo.models.Users;
 import com.terok.demo.payload.ApiResponse;
 import com.terok.demo.payload.ExerciseRequest;
 import com.terok.demo.repositories.ExerciseRepository;
+import com.terok.demo.repositories.UsersRepository;
 
 @RestController
 @RequestMapping("/api/exercises")
@@ -31,6 +33,8 @@ public class ExerciseController {
 	
 	@Autowired
 	private ExerciseRepository exerciseRepository;
+	
+	@Autowired UsersRepository usersRepository;
 	
 	Logger logger = LogManager.getLogger();
 	
@@ -62,8 +66,12 @@ public class ExerciseController {
 //				exerciseRequest.getDescription(),
 //				e);
 		
-		exercise.owner = auth.getName();
+		String userName = auth.getName();
+		Users user = usersRepository.findByUserName(userName);
+		
+		exercise.owner = userName;
 		exercise.setId(ObjectId.get());
+		user.exercises.add(exercise.getId());
 		
 		Date date = new Date();
 		
@@ -71,7 +79,10 @@ public class ExerciseController {
 		exercise.date = (exercise.date == null) 
 				? (new Date()) : (exercise.date);
 		logger.info(String.format("Saving to %s", exercise.owner));
+		
+		//Save exercise and user
 		exerciseRepository.save(exercise);
+		usersRepository.save(user);
 		
 		return ResponseEntity.ok("Added");
 		
