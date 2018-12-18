@@ -11,5 +11,9 @@ public interface ExerciseRepository extends MongoRepository<Exercises, ObjectId>
 	Exercises findExerciseById(ObjectId id);
 	
 	List<Exercises> findByOwner(String owner);
+	
+	List<Exercises> findByOwnerAndSport(String owner, String sport);
+
+	List<Exercises> findByOwnerAndSportAndSeason(String owner, String sport, String season);
 
 }

@@ -2,8 +2,11 @@ package com.terok.demo.models;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
@@ -24,6 +27,15 @@ public class Users {
 	
 	public List<String> exercises = new ArrayList<>();
 	
+	public List<String> seasons = new ArrayList<>();
+	
+	
+	//
+	//public Map<String, String> sports = new HashMap<String, String>();
+
+	//public Set<String> sports = 
+	//		 .asList( {"Juoksu", "Hiihto", "Pyöräily", "Kävely"} );
+	
 	//TODO Add Some default sports and user own
 	//private Set<String> sports = new HashSet<>();
 	
@@ -32,6 +44,8 @@ public class Users {
 		this._id = _id;
 		this.userName = userName;
 		this.password = password;
+		
+		
 	}
 
 	public String get_id() {

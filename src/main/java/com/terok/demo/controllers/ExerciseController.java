@@ -27,6 +27,10 @@ import com.terok.demo.payload.ExerciseRequest;
 import com.terok.demo.repositories.ExerciseRepository;
 import com.terok.demo.repositories.UsersRepository;
 
+/**
+ * @author tero
+ *
+ */
 @RestController
 @RequestMapping("/api/exercises")
 public class ExerciseController {
@@ -34,17 +38,13 @@ public class ExerciseController {
 	@Autowired
 	private ExerciseRepository exerciseRepository;
 	
-	@Autowired UsersRepository usersRepository;
+	@Autowired 
+	UsersRepository usersRepository;
 	
 	Logger logger = LogManager.getLogger();
 	
-//	@RequestMapping(value="", method=RequestMethod.GET)
-//	public String getExercise() {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		logger.info(auth.getName());
-//		logger.info(auth.getPrincipal());
-//		return "HELLO ROKI";
-//	}
+
+	
 	
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public ResponseEntity<?> addExercise(@RequestBody Exercises exercise){
@@ -89,15 +89,48 @@ public class ExerciseController {
 	}
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public ResponseEntity<?> getExercises(){
+	public ResponseEntity<List<Exercises>> getExercises(){
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
 		String owner = auth.getName();
 		//TODO findByOwner
 		List<Exercises> exercises = exerciseRepository.findByOwner(owner);
+		logger.info("PALAUTETAAN " + exercises);
+		//return ResponseEntity.ok(exercises);
+		return new ResponseEntity<List<Exercises>>(exercises, HttpStatus.OK );
+	}
+	
+	//GET /exercises/sport/{sport}
+	@GetMapping("/sport/{sport}")
+	public ResponseEntity<?> getExercisesBySport(@PathVariable String sport) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		String owner = auth.getName();
+		
+		List<Exercises> exercises = exerciseRepository.findByOwnerAndSport(owner, sport);
+		
+		logger.info(exercises);
 		
 		return ResponseEntity.ok(exercises);
+		
+	}
+	
+	//GET exercises by sport and season
+	@GetMapping("/sport/{sport}/{season}")
+	public ResponseEntity<?> getExercisesBySport(@PathVariable String sport, String season) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		String owner = auth.getName();
+		
+		List<Exercises> exercises = exerciseRepository.findByOwnerAndSportAndSeason(owner, sport, season);
+		
+		logger.info(exercises);
+		
+		return ResponseEntity.ok(exercises);
+		
 	}
 	
 	@GetMapping("/{id}")
@@ -150,6 +183,8 @@ public class ExerciseController {
 			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
 				HttpStatus.BAD_REQUEST);
 	}
+	
+	
 	
 	private boolean checkOwnerShip(Exercises exercise) {
 		return SecurityContextHolder.getContext().getAuthentication()
