@@ -29,7 +29,7 @@ public class Users {
 	
 	public List<String> seasons = new ArrayList<>();
 	
-	
+	public List<String> sports = new ArrayList<>();
 	//
 	//public Map<String, String> sports = new HashMap<String, String>();
 

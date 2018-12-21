@@ -27,10 +27,8 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication) {
     	
-    	//logger.info(authentication.getPrincipal())
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        logger.info(userPrincipal.getName());
-        logger.info("SEKRET " + jwtSecret);
+        
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
         String token = 
@@ -41,19 +39,10 @@ public class JwtTokenProvider {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-        logger.info("TOKEN LUOTU " + token);
         
         return token;
     }
 
-//    public Long getUserIdFromJWT(String token) {
-//        Claims claims = Jwts.parser()
-//                .setSigningKey(jwtSecret)
-//                .parseClaimsJws(token)
-//                .getBody();
-//
-//        return Long.parseLong(claims.getSubject());
-//    }
     
     public String getUserIdFromJWT(String token) {
     	Claims claims = Jwts.parser()
@@ -65,29 +54,15 @@ public class JwtTokenProvider {
     }
     
     public String getUserNameFromJWT(String token) {
-    	logger.info("TOKEN on " + token);
-    	logger.info("JA VIELA SEKRET " + jwtSecret);
-    	//TODO PARSE PARSE PARSE
-    	//Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    	
     	String username = Jwts.parser().parseClaimsJws(token).getBody().getSubject(); 
-    			//.setSigningKey(jwtSecret)
-    			//.parseClaimsJws(token)
-    			//.getBody().getSubject();
-    	//Jwts.parser().setSigningKey(jwtSecret).pa
-    	logger.info("USERI SAADAAN " + username);
-    	/*Claims claims = Jwts.parser()
-    			.setSigningKey(jwtSecret)
-    			.parseClaimsJwt(token)
-    			.getBody();
-    	logger.info("Claims on " + claims);
-    	*/
-    	//return claims.toString();
+       	logger.info("USER " + username);
+    	
     	return username;
     }
 
     public boolean validateToken(String authToken) {
         try {
-        	logger.info("SEKRETti " + jwtSecret);
             Jwts.parser().setSigningKey(jwtSecret)
             .parseClaimsJws(authToken)
             .getBody().getSubject();

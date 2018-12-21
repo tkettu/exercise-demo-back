@@ -1,5 +1,7 @@
 package com.terok.demo.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -10,7 +12,12 @@ import org.apache.logging.log4j.message.Message;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.terok.demo.models.Users;
+import com.terok.demo.payload.ApiResponse;
 import com.terok.demo.repositories.UsersRepository;
 
 @RestController
@@ -55,4 +63,39 @@ public class UserController {
 		return String.format("User %s added", userName);
 	}
 
+	//GET personal sport list
+	@GetMapping("/{username}/sports")
+	public ResponseEntity<?> getUserSports(@PathVariable String username) {
+		
+		
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		if (user == username) {
+			List<String> userSports = usersRepository.findSportsByUserName(username);
+			return ResponseEntity.ok(userSports);			
+		}else {
+			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/{username}/sports/{sport}")
+	public ResponseEntity<?> addNewSport(@PathVariable String username, String sport) {
+		
+		String appUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		if (appUser == username) {
+			Users user = usersRepository.findByUserName(username);
+			user.sports.add(sport);
+			usersRepository.save(user);
+			
+			return ResponseEntity.ok("ADDED new sport");
+		}else {
+			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	
 }
