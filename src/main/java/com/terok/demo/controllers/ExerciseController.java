@@ -67,24 +67,30 @@ public class ExerciseController {
 //				e);
 		
 		String userName = auth.getName();
-		Users user = usersRepository.findByUserName(userName);
+		
 		
 		exercise.owner = userName;
+		logger.info(userName);
+		logger.info(exercise.date);
 		exercise.setId(ObjectId.get());
-		user.exercises.add(exercise.getId());
 		
-		Date date = new Date();
 		
 		//Set date today if null
 		exercise.date = (exercise.date == null) 
 				? (new Date()) : (exercise.date);
 		logger.info(String.format("Saving to %s", exercise.owner));
 		
+		// We could save ids to users, but it may be not necessary
+		// and could cause extra complexity
+		//Users user = usersRepository.findByUserName(userName);
+		//logger.info(user);
+		//user.exercises.add(exercise.getId());
+		//usersRepository.save(user);
+		
 		//Save exercise and user
 		exerciseRepository.save(exercise);
-		usersRepository.save(user);
-		
-		return ResponseEntity.ok("Added");
+		logger.info("ADDED " + exercise.sport);
+		return ResponseEntity.ok(exercise.toString());
 		
 	}
 	
@@ -98,6 +104,7 @@ public class ExerciseController {
 		List<Exercises> exercises = exerciseRepository.findByOwner(owner);
 		logger.info("PALAUTETAAN " + exercises);
 		logger.info("For user " + owner);
+		
 		//return ResponseEntity.ok(exercises);
 		return new ResponseEntity<List<Exercises>>(exercises, HttpStatus.OK );
 	}
