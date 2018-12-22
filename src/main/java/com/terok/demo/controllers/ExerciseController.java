@@ -97,6 +97,7 @@ public class ExerciseController {
 		//TODO findByOwner
 		List<Exercises> exercises = exerciseRepository.findByOwner(owner);
 		logger.info("PALAUTETAAN " + exercises);
+		logger.info("For user " + owner);
 		//return ResponseEntity.ok(exercises);
 		return new ResponseEntity<List<Exercises>>(exercises, HttpStatus.OK );
 	}
