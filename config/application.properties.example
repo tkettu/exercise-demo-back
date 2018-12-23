@@ -1,0 +1,14 @@
+#EXAMPLE configuration
+
+spring.data.rest.base-path=/api
+
+spring.data.mongodb.host=<HOST>
+spring.data.mongodb.port=<PORT>
+spring.data.mongodb.username=
+spring.data.mongodb.password=
+spring.data.mongodb.database=<DATABSE_NAME>
+
+spring.security.user.password=
+
+app.jwtSecret=<JWT_SECRET_KEY>
+app.jwtExpirationInMs = 604800000

@@ -1,10 +1,13 @@
 package com.terok.demo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -90,6 +93,11 @@ public class ExercisesDemoApiApplicationTests {
 			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
 				
+	}
+	
+	@After
+	public void cleanUp() {
+		//TODO clean test database
 	}
 	
 	
