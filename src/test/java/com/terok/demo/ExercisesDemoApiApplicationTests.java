@@ -27,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.terok.demo.repositories.ExerciseRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,6 +43,9 @@ public class ExercisesDemoApiApplicationTests {
     @Autowired
     ObjectMapper objectMapper;
 	
+    @Autowired
+    private ExerciseRepository exerciseRepository;
+    
     private final static String EXERCISES_URL = "/api/exercises";
 	
 	@Before
@@ -49,6 +53,9 @@ public class ExercisesDemoApiApplicationTests {
 		this.mockMvc = webAppContextSetup(this.applicationContext)
 	            .apply(springSecurity())
 	            .build();
+		
+				exerciseRepository.deleteAll();
+				//exerciseRepository.save(exercise)
 	}
 
 	
@@ -72,6 +79,8 @@ public class ExercisesDemoApiApplicationTests {
 				+ "\"minutes\": 5, "
 				+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
 		
+		logger.info(exerciseRepository.count());
+		
 		MvcResult result = this.mockMvc
 			
 			.perform(post(EXERCISES_URL)
@@ -83,7 +92,7 @@ public class ExercisesDemoApiApplicationTests {
 			.andReturn();
 		
 		logger.info(result);
-		
+		logger.info(exerciseRepository.count());
 	}
 	
 	@Test
@@ -97,6 +106,8 @@ public class ExercisesDemoApiApplicationTests {
 	
 	@After
 	public void cleanUp() {
+		logger.info("CLEANING");
+		exerciseRepository.deleteAll();
 		//TODO clean test database
 	}
 	

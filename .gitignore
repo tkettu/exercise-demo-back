@@ -5,6 +5,7 @@
 !/config/*.example
 
 mvntest.sh
+springrun.sh
 
 ### STS ###
 .apt_generated
