@@ -45,8 +45,9 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/registration", method = RequestMethod.POST,
 					consumes="application/json")
-	public String addUser(@Valid @RequestBody Users user) {
+	public String addUser(@RequestBody Users user) {
 		
+		logger.info(user);
 		logger.info(String.format("Adding %s", user.userName));
 		
 		if(usersRepository.findByUserName(user.userName) != null) {

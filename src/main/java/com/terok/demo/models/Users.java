@@ -9,19 +9,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.aggregation.UnwindOperation.EmptyArraysBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.mongodb.lang.NonNull;
+import com.mongodb.lang.Nullable;
 
 @Document(collection = "users")
 public class Users {
 	
 	@Id
 	public ObjectId _id;
+	
+	@NonNull
 	public String userName;
+	
+	@Nullable
+	@Email
 	public String email;
 
+	@NonNull
 	public String password;
 	
 
@@ -42,9 +53,9 @@ public class Users {
 	//private Set<String> sports = new HashSet<>();
 	
 	
-	public Users(ObjectId _id, String userName, String password) {
+	public Users(ObjectId _id, String username, String password) {
 		this._id = _id;
-		this.userName = userName;
+		this.userName = username;
 		this.password = password;
 		
 		
@@ -62,8 +73,8 @@ public class Users {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String username) {
+		this.userName = username;
 	}
 
 	public String getEmail() {

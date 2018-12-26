@@ -42,10 +42,7 @@ public class ExerciseController {
 	UsersRepository usersRepository;
 	
 	Logger logger = LogManager.getLogger();
-	
 
-	
-	
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public ResponseEntity<?> addExercise(@RequestBody Exercises exercise){
 	//public ResponseEntity<?> addExercise(@RequestBody ExerciseRequest exerciseRequest) {	
@@ -53,25 +50,10 @@ public class ExerciseController {
 		//TODO luodako servicessa uusi exerciseRequestista vai näin kuin nyt
 		//exerciseRequest.setOwner(auth.getName());
 		
-//		Date date = new Date();
-//		
-//		Exercises exercise = new Exercises(ObjectId.get(), 
-//				auth.getName(),
-//				exerciseRequest.getSport(),
-//				exerciseRequest.getHours(),
-//				exerciseRequest.getMinutes(),
-//				exerciseRequest.getDistance(),
-//				exerciseRequest.getAvgHeartRate(),
-//				exerciseRequest.getMaxHeartRate(),
-//				exerciseRequest.getDescription(),
-//				e);
-		
 		String userName = auth.getName();
 		
 		
 		exercise.owner = userName;
-		logger.info(userName);
-		logger.info(exercise.date);
 		exercise.setId();
 		
 		
