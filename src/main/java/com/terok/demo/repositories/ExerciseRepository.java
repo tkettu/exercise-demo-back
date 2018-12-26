@@ -16,4 +16,6 @@ public interface ExerciseRepository extends MongoRepository<Exercises, ObjectId>
 
 	List<Exercises> findByOwnerAndSportAndSeason(String owner, String sport, String season);
 
+	
+	// Paging and sorting --> https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/
 }

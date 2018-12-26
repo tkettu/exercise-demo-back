@@ -72,7 +72,7 @@ public class ExerciseController {
 		exercise.owner = userName;
 		logger.info(userName);
 		logger.info(exercise.date);
-		exercise.setId(ObjectId.get());
+		exercise.setId();
 		
 		
 		//Set date today if null
@@ -90,7 +90,7 @@ public class ExerciseController {
 		//Save exercise and user
 		exerciseRepository.save(exercise);
 		logger.info("ADDED " + exercise.sport);
-		return ResponseEntity.ok(exercise.toString());
+		return ResponseEntity.ok(exercise);
 		
 	}
 	
@@ -100,10 +100,13 @@ public class ExerciseController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
 		String owner = auth.getName();
+		
+		logger.info("For user " + owner);
 		//TODO findByOwner
+		logger.info(exerciseRepository.count());
+		
 		List<Exercises> exercises = exerciseRepository.findByOwner(owner);
 		logger.info("PALAUTETAAN " + exercises);
-		logger.info("For user " + owner);
 		
 		//return ResponseEntity.ok(exercises);
 		return new ResponseEntity<List<Exercises>>(exercises, HttpStatus.OK );

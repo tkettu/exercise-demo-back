@@ -4,7 +4,9 @@ import java.util.Date;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "exercises")
 public class Exercises {
 	
 	@Id
@@ -31,10 +33,17 @@ public class Exercises {
 	
 	public String season; //
 
-	public Exercises(ObjectId id, String owner, String sport, int hours, int minutes, double distance, int avgHeartRate,
+	public Exercises() {this.id = ObjectId.get();}
+	
+	public Exercises(String owner) {
+		this.id = ObjectId.get();
+		this.owner = owner;
+	}
+	
+	public Exercises(String owner, String sport, int hours, int minutes, double distance, int avgHeartRate,
 			int maxHeartRate, String description, Date date, String season) {
-		super();
-		this.id = id;
+		
+		this.id = ObjectId.get();
 		this.owner = owner;
 		this.sport = sport;
 		this.hours = hours;
@@ -49,6 +58,10 @@ public class Exercises {
 	
 	public String getId() {
 		return id.toHexString();
+	}
+	
+	public void setId() {
+		this.id = ObjectId.get();
 	}
 	
 	public void setId(ObjectId id) {

@@ -1,15 +1,19 @@
 package com.terok.demo;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,6 +35,8 @@ import com.terok.demo.repositories.ExerciseRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
+//@DataMongoTest
 public class ExercisesDemoApiApplicationTests {
 
 	private MockMvc mockMvc;
@@ -43,8 +49,8 @@ public class ExercisesDemoApiApplicationTests {
     @Autowired
     ObjectMapper objectMapper;
 	
-    @Autowired
-    private ExerciseRepository exerciseRepository;
+//    @Autowired
+//    private ExerciseRepository exerciseRepository;
     
     private final static String EXERCISES_URL = "/api/exercises";
 	
@@ -53,15 +59,17 @@ public class ExercisesDemoApiApplicationTests {
 		this.mockMvc = webAppContextSetup(this.applicationContext)
 	            .apply(springSecurity())
 	            .build();
-		
-				exerciseRepository.deleteAll();
+				
+		//Clean test db before testing
+		//Activeprofiles should be test for that not deleting from dev database accidently
 				//exerciseRepository.save(exercise)
 	}
-
 	
-	@Test
-	public void contextLoads() {
-	}
+	
+
+//	@Test
+//	public void contextLoads() {
+//	}
 	
 	@Test 
 	public void getExercisesWithoutAuthorization() throws Exception {
@@ -71,45 +79,55 @@ public class ExercisesDemoApiApplicationTests {
 				
 	}
 	
-	@Test
-	@WithMockUser
-	public void postExerciseWithAuthorization() throws Exception {
-		
-		String content = "{ \"sport\": \"Juoksu\", \"distance\": 5, \"hours\": 1, "
-				+ "\"minutes\": 5, "
-				+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
-		
-		logger.info(exerciseRepository.count());
-		
-		MvcResult result = this.mockMvc
-			
-			.perform(post(EXERCISES_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(content))
-			
-			.andExpect(status().isOk())
-			.andDo(print())
-			.andReturn();
-		
-		logger.info(result);
-		logger.info(exerciseRepository.count());
-	}
+//	@Test
+//	@WithMockUser
+//	public void postExerciseWithAuthorization() throws Exception {
+//		
+//		String content = "{ \"sport\": \"Juoksu\", \"distance\": 5, \"hours\": 1, "
+//				+ "\"minutes\": 5, "
+//				+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
+//		
+//		
+//		logger.info(exerciseRepository.count());
+//		MvcResult result = this.mockMvc
+//			
+//			.perform(post(EXERCISES_URL)
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.content(content))
+//			
+//			.andExpect(status().isOk())
+//			.andDo(print())
+//			.andReturn();
+//		
+//		logger.info(result);
+//		logger.info(exerciseRepository.count());
+//	}
 	
-	@Test
-	@WithMockUser
-	public void getExercisesWithAuthorization() throws Exception {
-		this.mockMvc
-			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk());
-				
-	}
+//	@Test
+//	@WithMockUser
+//	public void getExercisesWithAuthorization() throws Exception {
+//		MvcResult result = this.mockMvc
+//			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
+//			.andExpect(status().isOk())
+//			.andDo(print())
+//			.andReturn();
+//		
+//		logger.info(result);
+//		logger.info(exerciseRepository.count());		
+//	}
 	
-	@After
-	public void cleanUp() {
-		logger.info("CLEANING");
-		exerciseRepository.deleteAll();
-		//TODO clean test database
-	}
+	
+	
+//	
+//	@Test
+//	@Af
+//	public void cleanUp() {
+//		logger.info("Cleaning");
+//		exerciseRepository.deleteAll();
+//		logger.info(exerciseRepository.count());
+//	}
+	
+
 	
 	
 }
