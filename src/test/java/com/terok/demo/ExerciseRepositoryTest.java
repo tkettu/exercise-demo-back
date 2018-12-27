@@ -65,7 +65,7 @@ public class ExerciseRepositoryTest {
 	
 	private List<ObjectId> ids = new ArrayList<>();
 
-	private String content = "{ \"sport\": \"Juoksu\", \"distance\": 5, \"hours\": 1, "
+	private String newExercise = "{ \"sport\": \"Juoksu\", \"distance\": 5, \"hours\": 1, "
 			+ "\"minutes\": 5, "
 			+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
 	
@@ -95,10 +95,10 @@ public class ExerciseRepositoryTest {
 			
 			.perform(post(EXERCISES_URL)
 					.contentType(MediaType.APPLICATION_JSON)
-					.content(content))
+					.content(newExercise))
 			
 			.andExpect(status().isOk())
-			.andExpect(MockMvcResultMatchers.content().json(content))
+			.andExpect(MockMvcResultMatchers.content().json(newExercise))
 			.andDo(print())
 			.andReturn();
 		

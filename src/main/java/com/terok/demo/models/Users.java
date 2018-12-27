@@ -38,7 +38,7 @@ public class Users {
 
 	private Set<Role> roles = new HashSet<>();
 	
-	public List<String> exercises = new ArrayList<>();
+	//public List<String> exercises = new ArrayList<>();
 	
 	public List<String> seasons = new ArrayList<>();
 	

@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.terok.demo.models.Exercises;
-import com.terok.demo.models.Users;
 import com.terok.demo.payload.ApiResponse;
-import com.terok.demo.payload.ExerciseRequest;
 import com.terok.demo.repositories.ExerciseRepository;
 import com.terok.demo.repositories.UsersRepository;
 
@@ -138,7 +136,6 @@ public class ExerciseController {
 			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
 					HttpStatus.BAD_REQUEST);
 		}
-		//return ResponseEntity.ok(exerciseRepository.findById(id));
 		
 	}
 	

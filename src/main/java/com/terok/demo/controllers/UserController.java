@@ -2,14 +2,8 @@ package com.terok.demo.controllers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.Message;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.terok.demo.models.Users;
@@ -51,23 +43,19 @@ public class UserController {
 		logger.info(String.format("Adding %s", user.username));
 		
 		if(usersRepository.findByUsername(user.username) != null) {
+			logger.info("USERNAME TAKEN");
 			return ResponseEntity.badRequest().body("Username already taken ");
 		}
 		
-		//user.set_id(ObjectId.get());
-				
-		String userName = user.username;
 		user.setPassword(passwordEncoder.encode(user.password));
 		usersRepository.save(user);
-		// TODO HttpStatus
-		// return response.getStatus();
+		
 		return ResponseEntity.ok(user);
 	}
 
 	//GET personal sport list
 	@GetMapping("/{username}/sports")
 	public ResponseEntity<?> getUserSports(@PathVariable String username) {
-		
 		
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
 		
@@ -80,6 +68,7 @@ public class UserController {
 		}
 	}
 	
+	//POST new sport to personal list
 	@PostMapping("/{username}/sports/{sport}")
 	public ResponseEntity<?> addNewSport(@PathVariable String username, String sport) {
 		
