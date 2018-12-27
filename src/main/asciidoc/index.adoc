@@ -1,4 +1,6 @@
-= User registration
+= Exercise demo API documentation
+
+== User registration
 
 .request
 include::{snippets}/user/http-request.adoc[]
@@ -7,7 +9,7 @@ include::{snippets}/user/http-request.adoc[]
 include::{snippets}/user/http-response.adoc[]
 
 
-= User login
+== User login
 
 .request
 include::{snippets}/login/http-request.adoc[]
@@ -16,10 +18,18 @@ include::{snippets}/login/http-request.adoc[]
 include::{snippets}/login/http-response.adoc[]
 
 
-= Exercise api
+== Get exercises
 
 .request
-include::{snippets}/exercise/http-request.adoc[]
+include::{snippets}/exercises/http-request.adoc[]
 
 .response
-include::{snippets}/exercise/http-response.adoc[]
+include::{snippets}/exercises/http-response.adoc[]
+
+== Add new exercise
+
+.request
+include::{snippets}/newexercise/http-request.adoc[]
+
+.response
+include::{snippets}/newexercise/http-response.adoc[]

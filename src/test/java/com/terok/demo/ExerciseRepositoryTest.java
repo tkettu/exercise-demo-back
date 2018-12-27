@@ -47,16 +47,15 @@ public class ExerciseRepositoryTest {
 
 	Logger logger = LogManager.getLogger();
 	
-	//@Autowired //TODO use test repository, add and remove one exercise
-	@MockBean
+	//TODO use test repository, add and remove one exercise
+	//@MockBean
+	@Autowired
 	private ExerciseRepository exerciseRepository;
 	
 	@Autowired
 	WebApplicationContext applicationContext;
 	
 	private MockMvc mockMvc;
-	
-	private RestDocumentationResultHandler documentationHandler;
 	
 	private final static String EXERCISES_URL = "/api/exercises";
 	
@@ -88,10 +87,10 @@ public class ExerciseRepositoryTest {
 	            .apply(documentationConfiguration(this.restDocumentation))
 	            .build();
 		
-		Exercises exercise = new Exercises("user");
-		exercise.setId();
-		
-		exerciseRepository.save(exercise);
+//		Exercises exercise = new Exercises("user");
+//		exercise.setId();
+//		
+//		exerciseRepository.save(exercise);
 				
 	}
 	
@@ -109,7 +108,7 @@ public class ExerciseRepositoryTest {
 			.andExpect(status().isOk())
 			.andExpect(MockMvcResultMatchers.content().json(newExercise))
 			.andDo(print())
-			.andDo(document("exercise"))
+			.andDo(document("newexercise"))
 			.andReturn();
 		
 		logger.info(result.getResponse());
@@ -123,7 +122,7 @@ public class ExerciseRepositoryTest {
 			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(print())
-			.andDo(document("exercise"))
+			.andDo(document("exercises"))
 			.andReturn();
 		
 		logger.info(result.getResponse());
