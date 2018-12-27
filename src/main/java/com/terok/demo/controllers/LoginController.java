@@ -53,7 +53,7 @@ public class LoginController {
 	@RequestMapping(value="", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest user) {
 		
-		
+		logger.info("NAME IS " + user.getUsername());
 		Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsername(),

@@ -45,23 +45,23 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/registration", method = RequestMethod.POST,
 					consumes="application/json")
-	public String addUser(@RequestBody Users user) {
+	public ResponseEntity<?> addUser(@RequestBody Users user) {
 		
 		logger.info(user);
-		logger.info(String.format("Adding %s", user.userName));
+		logger.info(String.format("Adding %s", user.username));
 		
-		if(usersRepository.findByUserName(user.userName) != null) {
-			return "Username already taken " + HttpStatus.BAD_REQUEST.toString();
+		if(usersRepository.findByUsername(user.username) != null) {
+			return ResponseEntity.badRequest().body("Username already taken ");
 		}
 		
 		//user.set_id(ObjectId.get());
 				
-		String userName = user.userName;
+		String userName = user.username;
 		user.setPassword(passwordEncoder.encode(user.password));
 		usersRepository.save(user);
 		// TODO HttpStatus
 		// return response.getStatus();
-		return String.format("User %s added", userName);
+		return ResponseEntity.ok(user);
 	}
 
 	//GET personal sport list
@@ -72,7 +72,7 @@ public class UserController {
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		if (user == username) {
-			List<String> userSports = usersRepository.findSportsByUserName(username);
+			List<String> userSports = usersRepository.findSportsByUsername(username);
 			return ResponseEntity.ok(userSports);			
 		}else {
 			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
@@ -86,7 +86,7 @@ public class UserController {
 		String appUser = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		if (appUser == username) {
-			Users user = usersRepository.findByUserName(username);
+			Users user = usersRepository.findByUsername(username);
 			user.sports.add(sport);
 			usersRepository.save(user);
 			

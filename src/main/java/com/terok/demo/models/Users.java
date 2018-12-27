@@ -25,14 +25,14 @@ public class Users {
 	@Id
 	public ObjectId _id;
 	
-	@NonNull
-	public String userName;
 	
-	@Nullable
+	public String username;
+	
+	
 	@Email
 	public String email;
 
-	@NonNull
+	
 	public String password;
 	
 
@@ -55,7 +55,7 @@ public class Users {
 	
 	public Users(ObjectId _id, String username, String password) {
 		this._id = _id;
-		this.userName = username;
+		this.username = username;
 		this.password = password;
 		
 		
@@ -70,11 +70,11 @@ public class Users {
 	}
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
 	public void setUserName(String username) {
-		this.userName = username;
+		this.username = username;
 	}
 
 	public String getEmail() {
