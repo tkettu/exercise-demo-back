@@ -48,9 +48,6 @@ public class ExercisesDemoApiApplicationTests {
 
     @Autowired
     ObjectMapper objectMapper;
-	
-//    @Autowired
-//    private ExerciseRepository exerciseRepository;
     
     private final static String EXERCISES_URL = "/api/exercises";
 	
@@ -60,16 +57,11 @@ public class ExercisesDemoApiApplicationTests {
 	            .apply(springSecurity())
 	            .build();
 				
-		//Clean test db before testing
-		//Activeprofiles should be test for that not deleting from dev database accidently
-				//exerciseRepository.save(exercise)
 	}
 	
-	
-
-//	@Test
-//	public void contextLoads() {
-//	}
+	@Test
+	public void contextLoads() {
+	}
 	
 	@Test 
 	public void getExercisesWithoutAuthorization() throws Exception {
@@ -78,56 +70,5 @@ public class ExercisesDemoApiApplicationTests {
 			.andExpect(status().isUnauthorized());
 				
 	}
-	
-//	@Test
-//	@WithMockUser
-//	public void postExerciseWithAuthorization() throws Exception {
-//		
-//		String content = "{ \"sport\": \"Juoksu\", \"distance\": 5, \"hours\": 1, "
-//				+ "\"minutes\": 5, "
-//				+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
-//		
-//		
-//		logger.info(exerciseRepository.count());
-//		MvcResult result = this.mockMvc
-//			
-//			.perform(post(EXERCISES_URL)
-//					.contentType(MediaType.APPLICATION_JSON)
-//					.content(content))
-//			
-//			.andExpect(status().isOk())
-//			.andDo(print())
-//			.andReturn();
-//		
-//		logger.info(result);
-//		logger.info(exerciseRepository.count());
-//	}
-	
-//	@Test
-//	@WithMockUser
-//	public void getExercisesWithAuthorization() throws Exception {
-//		MvcResult result = this.mockMvc
-//			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
-//			.andExpect(status().isOk())
-//			.andDo(print())
-//			.andReturn();
-//		
-//		logger.info(result);
-//		logger.info(exerciseRepository.count());		
-//	}
-	
-	
-	
-//	
-//	@Test
-//	@Af
-//	public void cleanUp() {
-//		logger.info("Cleaning");
-//		exerciseRepository.deleteAll();
-//		logger.info(exerciseRepository.count());
-//	}
-	
-
-	
 	
 }

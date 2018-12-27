@@ -1,6 +1,6 @@
 package com.terok.demo;
 
-import static org.mockito.Mockito.mockitoSession;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,16 +18,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mozilla.javascript.ast.NewExpression;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,18 +32,19 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.terok.demo.controllers.ExerciseController;
 import com.terok.demo.models.Exercises;
 import com.terok.demo.repositories.ExerciseRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-//@DataMongoTest
+//@AutoConfigureRestDocs(outputDir = "target/snippets")
 public class ExerciseRepositoryTest {
 
 	Logger logger = LogManager.getLogger();
 	
-	//@Autowired
+	//@Autowired //TODO use test repository, add and remove one exercise
 	@MockBean
 	private ExerciseRepository exerciseRepository;
 	
@@ -56,6 +52,8 @@ public class ExerciseRepositoryTest {
 	WebApplicationContext applicationContext;
 	
 	private MockMvc mockMvc;
+	
+	private RestDocumentationResultHandler documentationHandler;
 	
 	private final static String EXERCISES_URL = "/api/exercises";
 	
@@ -69,16 +67,21 @@ public class ExerciseRepositoryTest {
 			+ "\"minutes\": 5, "
 			+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
 	
+	
+	//https://docs.spring.io/spring-restdocs/docs/1.1.1.RELEASE/reference/html5/#customizing-requests-and-responses
 	@Before
 	public void setup () {
+//		
+//		this.documentationHandler = document("{method-name}", 
+//				preprocessRequest(removeHeaders("Foo")),
+//				preprocessResponse(prettyPrint()));
+		
 		this.mockMvc = webAppContextSetup(this.applicationContext)
 	            .apply(springSecurity())
-	            
 	            .build();
 		
 		Exercises exercise = new Exercises("user");
 		exercise.setId();
-		
 		
 		exerciseRepository.save(exercise);
 				
@@ -86,9 +89,7 @@ public class ExerciseRepositoryTest {
 	
 	@Test
 	@WithMockUser
-	public void postExerciseWithAuthorization() throws Exception {
-		
-		
+	public void shouldAddExerciseWithAuthorization() throws Exception {
 		
 		logger.info(exerciseRepository.count());
 		MvcResult result = this.mockMvc
@@ -100,33 +101,24 @@ public class ExerciseRepositoryTest {
 			.andExpect(status().isOk())
 			.andExpect(MockMvcResultMatchers.content().json(newExercise))
 			.andDo(print())
+			//.andDo(document("exercise"))
 			.andReturn();
 		
 		logger.info(result.getResponse());
-		
-		logger.info(exerciseRepository.count());
 	}
 	
 	@Test
 	@WithMockUser
-	public void getExercisesWithAuthorization() throws Exception {
+	public void shouldReturnExercisesWithAuthorization() throws Exception {
 		
-		
-		
-	
 		MvcResult result = this.mockMvc
 			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(print())
+			//.andDo(document("exercise"))
 			.andReturn();
 		
-		
-		
 		logger.info(result.getResponse());
-		//result.
-		logger.info(exerciseRepository.count());
-		logger.info("-------------ENDGETEXERCISESWITHAUTHORIZATION---------------");
-		//count result, expect +1 ennen inserttia
 	}
 	
 //	@Test
