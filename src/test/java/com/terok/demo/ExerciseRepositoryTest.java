@@ -1,6 +1,7 @@
 package com.terok.demo;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -67,6 +70,10 @@ public class ExerciseRepositoryTest {
 			+ "\"minutes\": 5, "
 			+ "	\"description\": \"Testi\", \"season\":  \"kesä18\"}";
 	
+	 @Rule
+	 public JUnitRestDocumentation restDocumentation =
+	    	 new JUnitRestDocumentation("target/generated-snippets");
+
 	
 	//https://docs.spring.io/spring-restdocs/docs/1.1.1.RELEASE/reference/html5/#customizing-requests-and-responses
 	@Before
@@ -78,6 +85,7 @@ public class ExerciseRepositoryTest {
 		
 		this.mockMvc = webAppContextSetup(this.applicationContext)
 	            .apply(springSecurity())
+	            .apply(documentationConfiguration(this.restDocumentation))
 	            .build();
 		
 		Exercises exercise = new Exercises("user");
@@ -101,7 +109,7 @@ public class ExerciseRepositoryTest {
 			.andExpect(status().isOk())
 			.andExpect(MockMvcResultMatchers.content().json(newExercise))
 			.andDo(print())
-			//.andDo(document("exercise"))
+			.andDo(document("exercise"))
 			.andReturn();
 		
 		logger.info(result.getResponse());
@@ -115,7 +123,7 @@ public class ExerciseRepositoryTest {
 			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(print())
-			//.andDo(document("exercise"))
+			.andDo(document("exercise"))
 			.andReturn();
 		
 		logger.info(result.getResponse());

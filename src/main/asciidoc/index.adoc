@@ -1,0 +1,25 @@
+= User registration
+
+.request
+include::{snippets}/user/http-request.adoc[]
+
+.response
+include::{snippets}/user/http-response.adoc[]
+
+
+= User login
+
+.request
+include::{snippets}/login/http-request.adoc[]
+
+.response
+include::{snippets}/login/http-response.adoc[]
+
+
+= Exercise api
+
+.request
+include::{snippets}/exercise/http-request.adoc[]
+
+.response
+include::{snippets}/exercise/http-response.adoc[]

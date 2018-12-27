@@ -10,12 +10,15 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.ManualRestDocumentation;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,7 +31,7 @@ import com.terok.demo.repositories.UsersRepository;;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureRestDocs(outputDir = "target/snippets")
+//@AutoConfigureRestDocs(outputDir = "target/snippets")
 public class WithMockUserTests {
 
 	Logger logger = LogManager.getLogger();
@@ -59,15 +62,23 @@ public class WithMockUserTests {
     		+ "\"password\": \"password\"}";
     		
     //private MockMvcRestDocumentation restDocumentation;
-    private RestDocumentationContextProvider restDocumentation;
+    //private RestDocumentationContextProvider restDocumentation;
+    //private ManualRestDocumentation restDocumentation =
+    	//	new ManualRestDocumentation("target/generated-snippets");
+    
+    @Rule
+    public JUnitRestDocumentation restDocumentation =
+    		new JUnitRestDocumentation("target/generated-snippets");
+
     
     @Before
 	public void setup () {
 		this.mockMvc = webAppContextSetup(this.applicationContext)
 	            .apply(springSecurity())
-	            //.apply(documentationConfiguration(restDocumentation))
+	            .apply(documentationConfiguration(this.restDocumentation))
 	            .build();
 		
+		//this.restDocumentation.beforeTest(getClass(),);
     }
     
 	@Test
@@ -85,7 +96,7 @@ public class WithMockUserTests {
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(newUser))
 			.andExpect(status().isOk())
-			//.andDo(document("user"))
+			.andDo(document("user"))
 			;
 	}
 	
@@ -97,7 +108,7 @@ public class WithMockUserTests {
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(falseUser))
 			.andExpect(status().isUnauthorized())
-			//.andDo(document("login"))
+			.andDo(document("login"))
 			;
 	}
 	
@@ -111,7 +122,7 @@ public class WithMockUserTests {
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(newUser))
 			.andExpect(status().isOk())
-			//.andDo(document("login"))
+			.andDo(document("login"))
 			;			
 		}
 	}
