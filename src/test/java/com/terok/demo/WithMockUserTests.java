@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.ManualRestDocumentation;
@@ -39,11 +40,11 @@ public class WithMockUserTests {
 	@Autowired
 	WebApplicationContext applicationContext;
 	
-	//@MockBean 
-	//UsersRepository usersRepository;
-	
-	@Autowired
+	@MockBean 
 	UsersRepository usersRepository;
+	
+	//@Autowired
+	//UsersRepository usersRepository;
 	
     private MockMvc mockMvc;
 	
@@ -81,24 +82,24 @@ public class WithMockUserTests {
 		//this.restDocumentation.beforeTest(getClass(),);
     }
     
-	@Test
-	public void shouldAddNewuser() throws Exception {
-		
-		
-		
-		if (usersRepository.findByUsername("testiUser")!= null) {
-			usersRepository.deleteById(usersRepository
-					.findByUsername("testiUser")._id);			
-		}
-		
-		this.mockMvc
-			.perform(post(USER_URL + "/registration")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(newUser))
-			.andExpect(status().isOk())
-			.andDo(document("user"))
-			;
-	}
+//	@Test
+//	public void shouldAddNewuser() throws Exception {
+//		
+//		
+//		
+//		if (usersRepository.findByUsername("testiUser")!= null) {
+//			usersRepository.deleteById(usersRepository
+//					.findByUsername("testiUser")._id);			
+//		}
+//		
+//		this.mockMvc
+//			.perform(post(USER_URL + "/registration")
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.content(newUser))
+//			.andExpect(status().isOk())
+//			.andDo(document("user"))
+//			;
+//	}
 	
 	@Test
 	public void shouldDenyAccessWithWrongCredentials() throws Exception {
@@ -112,19 +113,19 @@ public class WithMockUserTests {
 			;
 	}
 	
-	@Test
-	//@WithMockUser
-	public void shouldLoginAsUser() throws Exception {
-	
-		if (usersRepository.findByUsername("testiUser") != null) {
-			this.mockMvc
-			.perform(post(LOGIN_URL)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(newUser))
-			.andExpect(status().isOk())
-			.andDo(document("login"))
-			;			
-		}
-	}
+//	@Test
+//	//@WithMockUser
+//	public void shouldLoginAsUser() throws Exception {
+//	
+//		if (usersRepository.findByUsername("testiUser") != null) {
+//			this.mockMvc
+//			.perform(post(LOGIN_URL)
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.content(newUser))
+//			.andExpect(status().isOk())
+//			.andDo(document("login"))
+//			;			
+//		}
+//	}
 	
 }

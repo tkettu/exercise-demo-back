@@ -48,8 +48,8 @@ public class ExerciseRepositoryTest {
 	Logger logger = LogManager.getLogger();
 	
 	//TODO use test repository, add and remove one exercise
-	//@MockBean
-	@Autowired
+	@MockBean
+	//@Autowired
 	private ExerciseRepository exerciseRepository;
 	
 	@Autowired
@@ -98,7 +98,7 @@ public class ExerciseRepositoryTest {
 	@WithMockUser
 	public void shouldAddExerciseWithAuthorization() throws Exception {
 		
-		logger.info(exerciseRepository.count());
+		//logger.info(exerciseRepository.count());
 		MvcResult result = this.mockMvc
 			
 			.perform(post(EXERCISES_URL)
@@ -111,7 +111,7 @@ public class ExerciseRepositoryTest {
 			.andDo(document("newexercise"))
 			.andReturn();
 		
-		logger.info(result.getResponse());
+		//logger.info(result.getResponse());
 	}
 	
 	@Test
@@ -125,7 +125,7 @@ public class ExerciseRepositoryTest {
 			.andDo(document("exercises"))
 			.andReturn();
 		
-		logger.info(result.getResponse());
+		//logger.info(result.getResponse());
 	}
 	
 //	@Test
