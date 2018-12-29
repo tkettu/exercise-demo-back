@@ -52,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				// .csrf().disable().cors().and()
+				
 				.cors().and().csrf().disable()
 				.exceptionHandling()
 				.authenticationEntryPoint(unauthorizedHandler)
@@ -74,12 +74,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						.permitAll()
 				.antMatchers("/api/login").permitAll()
 				.antMatchers("/api/user/registration").permitAll()
-				//.antMatchers("/api/exercises").permitAll()  //TEST
 				.anyRequest().authenticated() //TEST
 				 //.and().httpBasic()
 				//.and().sessionManagement().disable();
 				;
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+	
+		http.requiresChannel()
+			.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+			.requiresSecure();
+	
 	}
 
 	@Bean

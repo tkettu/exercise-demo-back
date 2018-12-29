@@ -1,0 +1,9 @@
+app:
+  jwtExpirationInMs: 604800000
+  jwtSecret: ${JWT_SECRET}
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+    rest:
+      base-path: /api

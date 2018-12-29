@@ -1,4 +1,9 @@
 language: java
-
 services:
-    - mongodb
+- mongodb
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: nsJv4mNyrgP1MrhFu4RZOW1g0siscQiChwRQ78/5vS7xifzJUZV3S+soWdWwCqG7Lwt2Xs2KuLP++BvyvXFYF4hBt5tCetUAGC1pgsUnyNo6G37VMC6Q/VjnXGrP89jFn1rXoCsE3gcrpD75cASKd3MEmXIM+ubPQ/BosUvKKYbTG5ZnJkX4bRAx4cfczCjWPQSK40ab9Rzi4agoj05v2+g4EsJC8dOEaV3nePHd5KUOVBVRNkbtXaZbF4OlKVqMckyf9jHtt5RSMfyBu40zwoEJJofaON8UoFQpwyMDi+jUALj/VgJnkiL3db8LZCcYjvUfYYeFSnIL3GpsqpWTqYLkbLYk+9Q+AzVJ///vvo/dmeTnuEq3M0EV1ZmnGN9rgXXZoXk8UDJLDYyrqF4HZkfxSAodGiMKYqw90MtTmM0VKy/M9FYI4Y3xRYH+wGpUWZ8g8CV7WcinBcrWzXjf3cMnDyzb/zE49FeRXf4xTkn6q/uYbpXfR5c7sF0hI+3hC3dS31DSQQLvagnfMVg/Y+3H5mIBeO1TiZl05e80YhgF3hwTHB1N5ftmSTIqKh377P8yEWtVzyZtwr2NcYpzwGrghYSFgT7frTzllvEAZFQvntD5mi6g3kQx7nY18bsuiDUfY6nHLcj6CY1KGRwUHZ4ioqu5wghguqoOQmbqfxQ=
+  app: exercise-demo
