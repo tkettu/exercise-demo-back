@@ -1,7 +1,6 @@
-app:
-  jwtExpirationInMs: 604800000
-  jwtSecret: ${JWT_SECRET}
 spring:
-  data:
-    rest:
-      base-path: /api
+  profiles:
+    active:
+    - prod
+    - test
+    - dev
