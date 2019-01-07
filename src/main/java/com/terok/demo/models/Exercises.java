@@ -68,12 +68,12 @@ public class Exercises {
 		this.id = id;
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("%s %s, distance: %f, time: %d:%d, at %s "
-									, owner, sport, distance, hours, 
-									minutes, date.toString() );
-		
-	}
+//	@Override
+//	public String toString() {
+//		return String.format("%s %s, distance: %f, time: %d:%d, at %s "
+//									, owner, sport, distance, hours, 
+//									minutes, date.toString() );
+//		
+//	}
 	
 }

@@ -86,7 +86,7 @@ public class ExerciseController {
 		logger.info(exerciseRepository.count());
 		
 		List<Exercises> exercises = exerciseRepository.findByOwner(owner);
-		logger.info("PALAUTETAAN " + exercises);
+		//logger.info("PALAUTETAAN " + exercises);
 		
 		//return ResponseEntity.ok(exercises);
 		return new ResponseEntity<List<Exercises>>(exercises, HttpStatus.OK );
