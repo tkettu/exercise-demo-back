@@ -1,5 +1,8 @@
 package com.terok.demo;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -20,11 +23,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -46,6 +51,10 @@ import com.terok.demo.repositories.ExerciseRepository;
 public class ExerciseRepositoryTest {
 
 	Logger logger = LogManager.getLogger();
+	
+	
+	@InjectMocks
+	private ExerciseController exerciseController;
 	
 	//TODO use test repository, add and remove one exercise
 	@MockBean
@@ -111,12 +120,17 @@ public class ExerciseRepositoryTest {
 			.andDo(document("newexercise"))
 			.andReturn();
 		
-		//logger.info(result.getResponse());
+		logger.info(result.getResponse());
 	}
 	
 	@Test
 	@WithMockUser
 	public void shouldReturnExercisesWithAuthorization() throws Exception {
+		
+		Exercises newExercise = new Exercises("user");
+		newExercise.setId();
+		newExercise.sport = "Juoksu";
+		exerciseRepository.save(newExercise);
 		
 		MvcResult result = this.mockMvc
 			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
@@ -139,9 +153,30 @@ public class ExerciseRepositoryTest {
 //	public void deleteExerciseById
 	
 	
-//	@Test
-//	@WithMockUser
-//	public void getExerciseById
+	@Test
+	@WithMockUser
+	public void getExerciseById() throws Exception {
+		Exercises exercise = new Exercises();
+
+		ObjectId id = ObjectId.get();
+		exercise.setId(id);
+		exercise.owner = "user";
+		exercise.sport = "Juoksu";
+		when(exerciseRepository.findExerciseById(id)).thenReturn(exercise);
+		
+		MvcResult result = this.mockMvc
+				.perform(get(EXERCISES_URL+'/' +id))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn();
+		
+		logger.info(result);
+//		ResponseEntity<?> response = exerciseController.getOneExercise(id);
+//		
+//		logger.info(response);
+//		verify(exerciseRepository).findExerciseById(id);
+//		assertEquals(1,1);
+	}
 	
 	@After
 	public void cleanUp() {

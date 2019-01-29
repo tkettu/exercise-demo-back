@@ -125,7 +125,7 @@ public class ExerciseController {
 	}
 	
 	@GetMapping("/{id}")
-	ResponseEntity<?> getOneExercise(@PathVariable ObjectId id) {
+	public ResponseEntity<?> getOneExercise(@PathVariable ObjectId id) {
 		//TODO Check ownership??
 		
 		Exercises exercise = exerciseRepository.findExerciseById(id);
@@ -140,7 +140,7 @@ public class ExerciseController {
 	}
 	
 	@PutMapping("/{id}")
-	ResponseEntity<?> modifyExercise(@PathVariable ObjectId id, 
+	public ResponseEntity<?> modifyExercise(@PathVariable ObjectId id, 
 			@RequestBody Exercises newExercise) {
 		
 		//Exercises exercise = exerciseRepository.findExerciseById(id);
@@ -160,7 +160,7 @@ public class ExerciseController {
 	}
 	
 	@DeleteMapping("/{id}")
-	ResponseEntity<?> deleteExercise(@PathVariable ObjectId id) {
+	public ResponseEntity<?> deleteExercise(@PathVariable ObjectId id) {
 		
 		Exercises exercise = exerciseRepository.findExerciseById(id);
 		String name = exercise.sport;
