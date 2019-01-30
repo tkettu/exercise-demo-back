@@ -15,6 +15,7 @@ springrun.sh
 .settings
 .springBeans
 .sts4-cache
+.attach*
 
 ### IntelliJ IDEA ###
 .idea*

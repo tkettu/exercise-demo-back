@@ -1,6 +1,7 @@
 package com.terok.demo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -71,7 +72,8 @@ public class ExerciseRepositoryTest {
 	private String exerciseId;
 	
 	private Exercises exercise;
-	
+	private List<Exercises> exercises = new ArrayList<>();
+	private List<Exercises> allExercises = new ArrayList<>();
 	private List<ObjectId> ids = new ArrayList<>();
 
 	private String newExercise = "{ \"sport\": \"Juoksu\", \"distance\": 5, \"hours\": 1, "
@@ -96,11 +98,47 @@ public class ExerciseRepositoryTest {
 	            .apply(documentationConfiguration(this.restDocumentation))
 	            .build();
 		
+//		exercises.add(new Exercises("user", "Juoksu", 1, 12, 13, 0,0,"",null,""));
+//		exercises.add(new Exercises("user", "Hiihto", 2, 40, 30, 0,0,"",null,""));
+//		exercises.add(new Exercises("eriUser", "Juoksu", 1, 12, 13, 0,0,"",null,""));
+		initExerciseRepo();
+//		exerciseRepository.save(new Exercises("user", "Juoksu", 1, 12, 13, 0,0,"",null,""));
+//		exerciseRepository.save(new Exercises("user", "Hiihto", 2, 40, 30, 0,0,"",null,""));
+//		exerciseRepository.save(new Exercises("eriUser", "Juoksu", 1, 12, 13, 0,0,"",null,""));
+		
+//		for (Exercises e : exercises) {
+//			exerciseRepository.save(e);
+//		}
+		
+		
+		logger.info(exercises);
+		logger.info(exerciseRepository.count());
+		logger.info(exerciseRepository.findAll());
 //		Exercises exercise = new Exercises("user");
 //		exercise.setId();
 //		
 //		exerciseRepository.save(exercise);
 				
+	}
+	
+	private void initExerciseRepo() {
+		Exercises e1 = new Exercises("user");
+		e1.sport = "Juoksu";
+		exerciseRepository.save(e1);
+		exercises.add(e1);
+		allExercises.add(e1);
+		Exercises e2 = new Exercises();
+		e2.owner = "user";
+		e2.sport = "Hiihto";
+		exerciseRepository.save(e2);
+		exercises.add(e2);
+		allExercises.add(e2);
+		Exercises e3 = new Exercises("eriuser");
+		e3.sport = "Juoksu";
+		exerciseRepository.save(e3);
+		allExercises.add(e3);
+		when(exerciseRepository.findByOwner("user")).thenReturn(exercises);
+		when(exerciseRepository.findAll()).thenReturn(allExercises);
 	}
 	
 	@Test
@@ -127,11 +165,14 @@ public class ExerciseRepositoryTest {
 	@WithMockUser
 	public void shouldReturnExercisesWithAuthorization() throws Exception {
 		
-		Exercises newExercise = new Exercises("user");
-		newExercise.setId();
-		newExercise.sport = "Juoksu";
-		exerciseRepository.save(newExercise);
-		
+//		Exercises newExercise = new Exercises("user");
+//		newExercise.setId();
+//		newExercise.sport = "Juoksu";
+//		exerciseRepository.save(newExercise);
+
+//		exerciseRepository.save(new Exercises("user", "Juoksu", 1, 12, 13, 0,0,"",null,""));
+//		exerciseRepository.save(new Exercises("user", "Hiihto", 2, 40, 30, 0,0,"",null,""));
+//		exerciseRepository.save(new Exercises("eriUser", "Juoksu", 1, 12, 13, 0,0,"",null,""));
 		MvcResult result = this.mockMvc
 			.perform(get(EXERCISES_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -139,7 +180,9 @@ public class ExerciseRepositoryTest {
 			.andDo(document("exercises"))
 			.andReturn();
 		
-		//logger.info(result.getResponse());
+		//logger.info("RESULT" + result.getResponse().getContentAsString().split("\\},\\{"));
+		//assertEquals(result.getResponse()., actual);
+		//assertEquals(2, result.getResponse().getContentAsString().split("\\},\\{"));
 	}
 	
 //	@Test
@@ -170,12 +213,38 @@ public class ExerciseRepositoryTest {
 				.andDo(print())
 				.andReturn();
 		
-		logger.info(result);
+		assertTrue(result.getResponse().getContentAsString().contains("Juoksu"));
+		//logger.info("RESULLTI ON " + result.getResponse().getContentAsString().contains("Juoksu"));
 //		ResponseEntity<?> response = exerciseController.getOneExercise(id);
 //		
 //		logger.info(response);
 //		verify(exerciseRepository).findExerciseById(id);
 //		assertEquals(1,1);
+	}
+	
+	@Test
+	@WithMockUser
+	public void shouldNotReturnExerciseByDiffUser() throws Exception {
+		Exercises exercise = new Exercises();
+
+		ObjectId id = ObjectId.get();
+		exercise.setId(id);
+		exercise.owner = "eriOwner";
+		exercise.sport = "Juoksu";
+		when(exerciseRepository.findExerciseById(id)).thenReturn(exercise);
+		
+		MvcResult result = this.mockMvc
+				.perform(get(EXERCISES_URL+'/' +id))
+				.andExpect(status().isBadRequest())
+				.andDo(print())
+				.andReturn();
+	}
+	
+	@Test
+	@WithMockUser
+	public void shouldReturnExercisesBySport() throws Exception {
+		//TODO 
+		
 	}
 	
 	@After
