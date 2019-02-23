@@ -49,7 +49,7 @@ import com.terok.demo.repositories.ExerciseRepository;
 @SpringBootTest
 @ActiveProfiles("test")
 //@AutoConfigureRestDocs(outputDir = "target/snippets")
-public class ExerciseRepositoryTest {
+public class ExerciseControllerTests {
 
 	Logger logger = LogManager.getLogger();
 	

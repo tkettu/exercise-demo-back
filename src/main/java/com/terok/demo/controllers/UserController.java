@@ -46,8 +46,9 @@ public class UserController {
 			logger.info("USERNAME TAKEN");
 			return ResponseEntity.badRequest().body("Username already taken ");
 		}
-		
+		logger.info("TASSA");
 		user.setPassword(passwordEncoder.encode(user.password));
+		user.setId();
 		usersRepository.save(user);
 		
 		return ResponseEntity.ok(user);
@@ -58,8 +59,10 @@ public class UserController {
 	public ResponseEntity<?> getUserSports(@PathVariable String username) {
 		
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		logger.info(user);
+		logger.info(username);
 		
-		if (user == username) {
+		if (user.equals(username)) {
 			List<String> userSports = usersRepository.findSportsByUsername(username);
 			return ResponseEntity.ok(userSports);			
 		}else {
@@ -74,7 +77,7 @@ public class UserController {
 		
 		String appUser = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		if (appUser == username) {
+		if (appUser.equals(username)) {
 			Users user = usersRepository.findByUsername(username);
 			user.sports.add(sport);
 			usersRepository.save(user);

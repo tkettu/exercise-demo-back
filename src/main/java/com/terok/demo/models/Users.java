@@ -57,8 +57,6 @@ public class Users {
 		this._id = _id;
 		this.username = username;
 		this.password = password;
-		
-		
 	}
 
 	public String get_id() {
@@ -67,6 +65,10 @@ public class Users {
 
 	public void set_id(ObjectId _id) {
 		this._id = _id;
+	}
+	
+	public void setId( ) {
+		this._id = ObjectId.get();
 	}
 
 	public String getUserName() {
@@ -99,6 +101,12 @@ public class Users {
 	
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public void setDefaultSports( ) {
+		this.sports.add("Juoksu");
+		this.sports.add("Hiihto");
+		this.sports.add("Kävely");
 	}
 		
 }
