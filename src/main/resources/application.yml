@@ -4,6 +4,5 @@ app:
 spring:
   profiles:
     active:
-    - prod
     - test
     - dev

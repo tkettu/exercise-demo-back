@@ -4,6 +4,8 @@
 /config/*
 !/config/*.example
 
+application-dev.*
+
 mvntest.sh
 springrun.sh
 

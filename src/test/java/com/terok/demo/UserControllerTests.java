@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.terok.demo.models.Users;
 import com.terok.demo.repositories.UsersRepository;
 
 
@@ -55,6 +56,8 @@ public class UserControllerTests {
 	    		"{\"username\": \"testiUser\", "
 	    		+ "\"password\": \"veriS3kret\", "
 	    		+ "\"email\": \"testi@user.com\"}";
+	 
+	 //private Users user = new Users()
 	
 	@Before
 	public void setup () {
@@ -90,10 +93,10 @@ public class UserControllerTests {
 //		sports.add("Hiihto");
 //		sports.add("Kävely");
 		
-		when(usersRepository.findSportsByUsername("user")).thenReturn(sports);
-		
+		//when(usersRepository.findSportsByUsername("user")).thenReturn(sports);
+		//when(usersRepository.findByUsername("user")).thenReturn(sports);
 		MvcResult result = this.mockMvc
-				.perform(get(USER_URL + "/user/sports"))
+				.perform(get(USER_URL + "/sports"))
 				.andExpect(status().isOk())
 				//.andExpect(content().json(jsonContent))
 				.andDo(print())

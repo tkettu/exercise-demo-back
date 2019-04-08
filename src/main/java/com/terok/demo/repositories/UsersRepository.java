@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import com.terok.demo.models.Users;
 
@@ -12,7 +13,9 @@ public interface UsersRepository extends MongoRepository<Users, ObjectId> {
 	Users findByUsername(String username);
 	Optional<Users> findById(ObjectId id);
 	
-	List<String> findSportsByUsername(String username);
+	
+	//List<String> findSportsByUsername(String username);
+	
 	//Users findById(ObjectId _id);
 	//Users findUsers(ObjectId id);
 	

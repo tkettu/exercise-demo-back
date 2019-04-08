@@ -1,5 +1,6 @@
 package com.terok.demo.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -63,8 +64,27 @@ public class UserController {
 		logger.info(username);
 		
 		if (user.equals(username)) {
-			List<String> userSports = usersRepository.findSportsByUsername(username);
+			//List<String> userSports = usersRepository.findSportsByUsername(username);
+			Users users = usersRepository.findByUsername(username);
+			List<String> userSports = users.sports;
 			return ResponseEntity.ok(userSports);			
+		}else {
+			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	//GET default sport list
+	@GetMapping("/sports")
+	public ResponseEntity<?> getDefaultSports() {
+		
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		if (user != null) {
+			
+			List<String> sports = Arrays.asList("Juoksu", "Hiihto", "Kävely", "Pyöräily");
+			logger.info("SPORTIT ON " + sports);
+			return ResponseEntity.ok(sports);
 		}else {
 			return new ResponseEntity(new ApiResponse(false, "Not allowed"), 
 					HttpStatus.BAD_REQUEST);
